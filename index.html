@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לוח מחוונים - נעמה פלאח</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+        }
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .graph-icon {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .graph-icon:hover {
+            color: #38bdf8; /* sky-400 */
+        }
+        .tab-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            border-color: #0ea5e9;
+        }
+        .tab-btn {
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-gray-300">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="flex flex-col sm:flex-row items-center justify-between mb-8">
+            <div class="mb-4 sm:mb-0">
+                <h1 class="text-3xl sm:text-4xl font-bold text-white">לוח מחוונים: נעמה פלאח</h1>
+                <p class="text-lg text-slate-400 mt-1">מעקב התקדמות וביצועים</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-full bg-sky-500 flex items-center justify-center text-white text-2xl font-bold">
+                    <span>נפ</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="flex space-x-4 space-x-reverse mb-8 border-b border-slate-700 pb-2">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active px-6 py-2 rounded-t-lg font-semibold text-slate-400 hover:text-white border-b-2 border-transparent">
+                לוח בקרה
+            </button>
+            <button onclick="switchTab('plan')" id="tab-plan" class="tab-btn px-6 py-2 rounded-t-lg font-semibold text-slate-400 hover:text-white border-b-2 border-transparent">
+                תוכנית אימונים
+            </button>
+        </div>
+
+        <main id="dashboard-section">
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+                <div class="bg-slate-800 p-6 rounded-xl shadow-lg flex items-center gap-4">
+                    <i data-lucide="calendar-days" class="w-10 h-10 text-sky-400"></i>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-400">תאריך עדכון אחרון</h3>
+                        <p class="text-2xl font-bold text-white">16.04.2026</p>
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl shadow-lg flex items-center gap-4">
+                    <i data-lucide="trophy" class="w-10 h-10 text-amber-400"></i>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-400">ההתקדמות הגדולה ביותר</h3>
+                        <p class="text-xl font-bold text-white">האק סקוואט: <span class="text-amber-400">60 &rarr; 70 ק"ג</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Motivational Message -->
+            <div class="bg-slate-800 border-r-4 border-emerald-500 text-emerald-300 p-4 rounded-lg shadow-lg my-8" role="alert">
+                <p class="font-bold text-emerald-200">איזו התקדמות מטורפת!</p>
+                <p>כל הכבוד על חציית רף ה-45 ק"ג בסקוואט חופשי! גם המתח משתפר מרגע לרגע, לחיצת הכתפיים מתחזקת והבולגרי מרקיע שחקים. המשיכי בעבודה המעולה הזו!</p>
+            </div>
+
+            <!-- Compound Lifts Progression -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-bold text-center mb-6 text-white">ביצועי שיא: תרגילי ליבה</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Squat Card -->
+                    <div class="bg-slate-800 p-6 rounded-xl shadow-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white">סקוואט (מוט חופשי)</h3>
+                            <i data-lucide="line-chart" class="graph-icon text-slate-400" data-exercise="smithSquat" data-exercise-name="סקוואט (סמית' / חופשי)"></i>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-1">התחלה: 2.5 ק"ג x 10</p>
+                        <p class="text-2xl font-bold text-sky-400">45 ק"ג <span class="text-lg font-medium text-slate-300">x 3</span></p>
+                        <p class="text-sm text-slate-500 mt-1">שיא אישי (16.04)</p>
+                    </div>
+                    <!-- Hip Thrust Card -->
+                    <div class="bg-slate-800 p-6 rounded-xl shadow-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white">היפ טראסט (מכונה)</h3>
+                             <i data-lucide="line-chart" class="graph-icon text-slate-400" data-exercise="hipThrust" data-exercise-name="היפ טראסט"></i>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-1">התחלה: 2.5 ק"ג x 6</p>
+                        <p class="text-2xl font-bold text-sky-400">32.5 ק"ג צד <span class="text-lg font-medium text-slate-300">x 6</span></p>
+                        <p class="text-sm text-slate-500 mt-1">שיא אישי (12.04)</p>
+                    </div>
+                    <!-- Bulgarian Squat Card -->
+                    <div class="bg-slate-800 p-6 rounded-xl shadow-lg">
+                         <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white">בולגרי (סמית')</h3>
+                            <i data-lucide="line-chart" class="graph-icon text-slate-400" data-exercise="bulgarianSquat" data-exercise-name="בולגרי סקוואט"></i>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-1">התחלה: משקל גוף x 8</p>
+                        <p class="text-2xl font-bold text-sky-400">5 ק"ג צד <span class="text-lg font-medium text-slate-300">x 8</span></p>
+                        <p class="text-sm text-slate-500 mt-1">שיא אישי (16.04)</p>
+                    </div>
+                     <!-- Pullups Card -->
+                     <div class="bg-slate-800 p-6 rounded-xl shadow-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white">מתח</h3>
+                            <i data-lucide="line-chart" class="graph-icon text-slate-400" data-exercise="pullups" data-exercise-name="מתח (גרביטון/גומיות)"></i>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-1">התחלה: גרביטון -56 ק"ג</p>
+                        <div class="flex items-baseline gap-2">
+                             <p class="text-lg font-bold text-sky-400">גומיה אדומה רחבה</p>
+                             <span class="text-lg font-medium text-slate-300">x 4</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-1">שיא אישי (16.04)</p>
+                    </div>
+                    <!-- Romanian Deadlift Card -->
+                    <div class="bg-slate-800 p-6 rounded-xl shadow-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white">רומניאן דדליפט</h3>
+                            <i data-lucide="line-chart" class="graph-icon text-slate-400" data-exercise="romanianDeadlift" data-exercise-name="רומניאן דדליפט"></i>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-1">התחלה: 25 ק"ג x 8</p>
+                        <p class="text-2xl font-bold text-sky-400">60 ק"ג <span class="text-lg font-medium text-slate-300">x 6</span></p>
+                        <p class="text-sm text-slate-500 mt-1">שיא אישי (16.02)</p>
+                    </div>
+                     <!-- Leg Press Card -->
+                     <div class="bg-slate-800 p-6 rounded-xl shadow-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white">לחיצת רגליים</h3>
+                            <i data-lucide="line-chart" class="graph-icon text-slate-400" data-exercise="legPress" data-exercise-name="לחיצת רגליים"></i>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-1">התחלה: 20 ק"ג x 8</p>
+                        <p class="text-2xl font-bold text-sky-400">110 ק"ג <span class="text-lg font-medium text-slate-300">x 8</span></p>
+                        <p class="text-sm text-slate-500 mt-1">שיא אישי (16.02)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main progress table -->
+            <div class="bg-slate-800 rounded-xl shadow-lg overflow-hidden">
+                <div class="px-4 pt-5 sm:px-6">
+                    <h2 class="text-2xl font-bold text-center text-white my-2">שיאים אישיים נוספים</h2>
+                    <p class="text-center text-sm text-slate-500 pb-4 md:hidden">ניתן לגלול את הטבלה ימינה ושמאלה</p>
+                </div>
+                <div class="table-responsive">
+                    <table class="w-full min-w-max text-sm text-right text-slate-300">
+                        <thead class="text-xs text-slate-400 uppercase bg-slate-700/50">
+                            <tr>
+                                <th scope="col" class="px-3 py-3 sm:px-6 sm:py-3 font-semibold">תרגיל</th>
+                                <th scope="col" class="px-3 py-3 sm:px-6 sm:py-3 font-semibold">משקל התחלתי</th>
+                                <th scope="col" class="px-3 py-3 sm:px-6 sm:py-3 font-semibold">שיא עדכני</th>
+                                <th scope="col" class="px-3 py-3 sm:px-6 sm:py-3 font-semibold">תאריך עדכון</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700">
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">פולי עליון (סופינציה)</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">-</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">40 ק"ג x 8</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">16.02.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">חתירה (מוט)</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">10 ק"ג x 10</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">30 ק"ג x 6</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">16.02.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">לחיצת כתפיים (מוט)</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">מוט ריק x 8</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">20 ק"ג x 7</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">16.04.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">לחיצת חזה (משקולות יד)</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">-</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">10 ק"ג x 6</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">16.02.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">לחיצת חזה (סמית')</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">-</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">10 ק"ג צד x 6</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">12.04.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">כפיפות בטן (משקולת)</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">-</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">2.5 ק"ג x 10</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">16.02.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">לחיצת רגל אחת</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">-</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">15 ק"ג x 8</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">30.01.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">האק סקוואט</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">20 ק"ג x 10</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">70 ק"ג x 6</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">12.04.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">כפיפת ברכיים (בישיבה)</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">-</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">32.5 ק"ג x 10</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">12.04.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">כיסא רומי</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">-</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">10 ק"ג x 8</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">12.04.26</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">קיק-באק</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">10 ק"ג x 10</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">60 ק"ג x 8</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">10.10.25</td></tr>
+                            <tr class="hover:bg-slate-700/50"><td class="px-3 py-4 sm:px-6 sm:py-4 whitespace-nowrap">מקבילים (גרביטון)</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">-56 ק"ג x 6</td><td class="px-3 py-4 sm:px-6 sm:py-4 font-bold text-white">-35 ק"ג x 8</td><td class="px-3 py-4 sm:px-6 sm:py-4 text-slate-400">09.07.25</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- New Training Plan Section (Hidden by default) -->
+        <main id="plan-section" class="hidden">
+            <div class="bg-slate-800 border-l-4 border-sky-500 p-6 rounded-r-xl shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-white mb-2">דגשים כלליים לתוכנית</h2>
+                <ul class="list-disc list-inside text-slate-300 space-y-2">
+                    <li><span class="font-bold text-sky-400">טווח חזרות:</span> 6 עד 15 חזרות לכל סט.</li>
+                    <li><span class="font-bold text-sky-400">כמות סטים:</span> 3-4 סטים לכל תרגיל.</li>
+                    <li><span class="font-bold text-sky-400">דרגת קושי (RPE):</span> 7-8 (להשאיר 2-3 חזרות ב"רזרבה", מאמץ גבוה אך לא כשל מוחלט).</li>
+                </ul>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2">
+                <!-- Zone 1: Machines -->
+                <div class="bg-slate-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-slate-700/50 px-6 py-4 border-b border-slate-700 flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i data-lucide="dumbbell" class="w-5 h-5 text-sky-400"></i>
+                            איזור מכונות / "גריאטריה"
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">פשיטת ברכיים</h4>
+                                <p class="text-sm text-slate-400">ארבע ראשי</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-sky-400 font-bold">3-4 סטים</span>
+                                <span class="text-sm text-slate-300">6-15 חזרות</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">כפיפת ברכיים</h4>
+                                <p class="text-sm text-slate-400">האמסטרינג</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-sky-400 font-bold">3-4 סטים</span>
+                                <span class="text-sm text-slate-300">6-15 חזרות</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">הרחקות במכונה</h4>
+                                <p class="text-sm text-slate-400">ישבן / ירך חיצונית</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-sky-400 font-bold">3-4 סטים</span>
+                                <span class="text-sm text-slate-300">6-15 חזרות</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">לחיצת כתפיים / חזה</h4>
+                                <p class="text-sm text-slate-400">במכונה (לבחירה)</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-sky-400 font-bold">3-4 סטים</span>
+                                <span class="text-sm text-slate-300">6-15 חזרות</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zone 2: Cables -->
+                <div class="bg-slate-800 rounded-xl shadow-lg overflow-hidden h-fit">
+                    <div class="bg-slate-700/50 px-6 py-4 border-b border-slate-700 flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i data-lucide="cable" class="w-5 h-5 text-amber-400"></i>
+                            איזור כבלים / פולי
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">פולי עליון</h4>
+                                <p class="text-sm text-slate-400">גב (תנועת מתח)</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-sky-400 font-bold">3-4 סטים</span>
+                                <span class="text-sm text-slate-300">6-15 חזרות</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="text-center mt-10 text-sm text-slate-500">
+            <p>לוח המחוונים נוצר כדי להמחיש את העבודה הקשה וההתמדה שלך. גאים בך!</p>
+        </footer>
+    </div>
+
+    <!-- Graph Modal -->
+    <div id="graphModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-slate-800 rounded-xl shadow-2xl w-full max-w-3xl p-6 border border-slate-700">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="chartTitle" class="text-2xl font-bold text-white">גרף התקדמות</h3>
+                <button id="closeModal" class="text-slate-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <canvas id="progressChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // --- Tab Switching Logic ---
+        function switchTab(tabName) {
+            const dashboardSection = document.getElementById('dashboard-section');
+            const planSection = document.getElementById('plan-section');
+            const tabDashboard = document.getElementById('tab-dashboard');
+            const tabPlan = document.getElementById('tab-plan');
+
+            if (tabName === 'dashboard') {
+                dashboardSection.classList.remove('hidden');
+                planSection.classList.add('hidden');
+                tabDashboard.classList.add('active');
+                tabPlan.classList.remove('active');
+            } else {
+                dashboardSection.classList.add('hidden');
+                planSection.classList.remove('hidden');
+                tabDashboard.classList.remove('active');
+                tabPlan.classList.add('active');
+            }
+        }
+        
+        // --- Chart global settings for dark mode ---
+        Chart.defaults.color = '#94a3b8'; // slate-400
+        Chart.defaults.borderColor = '#334155'; // slate-700
+
+        const rawProgressData = {
+            smithSquat: [ {date: '3.3', weight: 2.5}, {date: '3.4', weight: 3.75}, {date: '4.4', weight: 5}, {date: '19.9', weight: 10}, {date: '24.10', weight: 7.5}, {date: '1.10', weight: 10}, {date: '3.10', weight: 10}, {date: '6.10', weight: 15}, {date: '8.10', weight: 12.5}, {date: '26.6', weight: 12.5}, {date: '4.7', weight: 15}, {date: '9.7', weight: 7.5}, {date: '10.10', weight: 7.5}, {date: '1.10', weight: 15}, {date: '5.10', weight: 15}, {date: '9.10', weight: 16.25}, {date: '21.7', weight: 35}, {date: '26.9', weight: 40}, {date: '12.10', weight: 56.5}, {date: '12.12', weight: 62.5}, {date: '30.1', weight: 45}, {date: '05.02', weight: 42.5}, {date: '16.04', weight: 45} ],
+            hipThrust: [ {date: 'ND', weight: 2.5}, {date: '2.3', weight: 7.5}, {date: '3.3', weight: 10}, {date: '1.4', weight: 12.5}, {date: '3.4', weight: 12.5}, {date: '4.4', weight: 12.5}, {date: '19.9', weight: 13.75}, {date: '27.9', weight: 10}, {date: '20.10', weight: 10}, {date: '24.10', weight: 10}, {date: '5.10', weight: 15}, {date: '6.10', weight: 15}, {date: '8.10', weight: 12.5}, {date: '10.10', weight: 15}, {date: '2.10', weight: 20}, {date: '5.10', weight: 15}, {date: '6.10', weight: 20}, {date: '7.10', weight: 22.5}, {date: '8.10', weight: 25}, {date: '9.10', weight: 25}, {date: '1.10', weight: 25}, {date: '2.10', weight: 30}, {date: '4.10', weight: 27.5}, {date: '6.10', weight: 30}, {date: '7.10', weight: 27.5}, {date: '9.10', weight: 30}, {date: '10.10', weight: 30}, {date: '3.10', weight: 85}, {date: '9.10', weight: 75}, {date: '26.6', weight: 85}, {date: '12.10', weight: 90}, {date: '30.1', weight: 55}, {date: '05.02', weight: 60}, {date: '12.04', weight: 65} ],
+            bulgarianSquat: [ {date: '3.3', weight: 0}, {date: '1.4', weight: 4}, {date: '27.9', weight: 8}, {date: '6.10', weight: 8}, {date: '8.10', weight: 10}, {date: '10.10', weight: 5}, {date: '7.10', weight: 15}, {date: '10.10', weight: 20}, {date: '5.10', weight: 17.5}, {date: '16.7', weight: 22.5}, {date: '26.9', weight: 22.5}, {date: '16.2', weight: 8}, {date: '12.04', weight: 5}, {date: '16.04', weight: 5} ],
+            pullups: [ {date: 'ND', weight: -56}, {date: '3.4', weight: -49}, {date: '4.4', weight: -42}, {date: '19.9', weight: -35}, {date: '27.9', weight: -35}, {date: '20.10', weight: -42}, {date: '24.10', weight: -35}, {date: '6.10', weight: -35}, {date: '7.10', weight: -35}, {date: '8.10', weight: -35}, {date: '26.9', weight: -40}, {date: '26.9', weight: -35}, {date: '12.04', weight: -30}, {date: '16.04', weight: -28} ],
+            romanianDeadlift: [ {date: 'ND', weight: 25 }, {date: '3.3', weight: 15}, {date: '1.4', weight: 2.5}, {date: '2.4', weight: 2.5}, {date: '19.9', weight: 7.5}, {date: '27.9', weight: 7.5}, {date: '24.10', weight: 10}, {date: '5.10', weight: 10}, {date: '6.10', weight: 5}, {date: '7.10', weight: 7.5}, {date: '8.10', weight: 40}, {date: '10.10', weight: 12.5}, {date: '6.10', weight: 7.5}, {date: '7.10', weight: 10}, {date: '9.10', weight: 10}, {date: '1.10', weight: 11.25}, {date: '5.10', weight: 17.5}, {date: '6.10', weight: 12.5}, {date: '7.10', weight: 10}, {date: '10.10', weight: 20}, {date: '5.10', weight: 22.5}, {date: '11.10', weight: 45}, {date: '12.10', weight: 50}, {date: '30.1', weight: 55}, {date: '05.02', weight: 57.5}, {date: '16.2', weight: 60}],
+            legPress: [ {date: 'ND', weight: 20}, {date: '2.3', weight: 22.5}, {date: '1.4', weight: 25}, {date: '4.4', weight: 0}, {date: '20.10', weight: 20}, {date: '5.10', weight: 30}, {date: '4.10', weight: 45}, {date: '10.10', weight: 60}, {date: '3.7', weight: 100}, {date: '7.10', weight: 100}, {date: '8.10', weight: 95}, {date: '12.10', weight: 100}, {date: '12.12', weight: 110}, {date: '16.2', weight: 110} ]
+        };
+
+        const progressData = {};
+        for (const exerciseKey in rawProgressData) {
+            let maxWeight = -Infinity; 
+            progressData[exerciseKey] = rawProgressData[exerciseKey].map(dataPoint => {
+                return dataPoint; 
+            });
+        }
+        
+        const modal = document.getElementById('graphModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const chartTitle = document.getElementById('chartTitle');
+        const chartCanvas = document.getElementById('progressChart').getContext('2d');
+        let progressChart = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+             lucide.createIcons();
+            const icons = document.querySelectorAll('.graph-icon');
+            icons.forEach(icon => {
+                icon.addEventListener('click', () => {
+                    const exerciseKey = icon.dataset.exercise;
+                    const exerciseName = icon.dataset.exerciseName;
+                    const exerciseData = progressData[exerciseKey];
+
+                    if (exerciseData && exerciseData.length > 0) {
+                        const labels = exerciseData.map(d => d.date);
+                        const data = exerciseData.map(d => d.weight);
+
+                        chartTitle.textContent = `התקדמות: ${exerciseName}`;
+                        
+                        if(progressChart) {
+                            progressChart.destroy();
+                        }
+
+                        let chartOptions = {
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    title: {
+                                        display: true,
+                                        text: 'משקל בקילוגרמים',
+                                        color: '#cbd5e1' // slate-300
+                                    },
+                                    grid: {
+                                        color: '#334155' // slate-700
+                                    }
+                                },
+                                x: {
+                                     grid: {
+                                        color: '#334155' // slate-700
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: '#e2e8f0' // slate-200
+                                    }
+                                }
+                            },
+                            responsive: true,
+                            maintainAspectRatio: true
+                        };
+                        
+                        progressChart = new Chart(chartCanvas, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'משקל (ק"ג)',
+                                    data: data,
+                                    backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                                    borderColor: 'rgba(56, 189, 248, 1)',
+                                    borderWidth: 2,
+                                    tension: 0.1,
+                                    fill: true,
+                                    pointBackgroundColor: 'rgba(56, 189, 248, 1)',
+                                    pointHoverRadius: 6,
+
+                                }]
+                            },
+                            options: chartOptions
+                        });
+                        modal.classList.remove('hidden');
+                    }
+                });
+            });
+        });
+
+        const closeModal = () => {
+            modal.classList.add('hidden');
+        };
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+```
